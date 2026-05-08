@@ -16,6 +16,12 @@
     <sonar.organization>appointment1</sonar.organization>
     <sonar.projectKey>appointment1_appointment-</sonar.projectKey>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
+    <!-- ✅ هذا السطر الجديد (المهم) -->
+    <sonar.coverage.jacoco.xmlReportPaths>
+      target/site/jacoco/jacoco.xml
+    </sonar.coverage.jacoco.xmlReportPaths>
+
   </properties>
 
   <dependencies>
@@ -88,7 +94,7 @@
         <version>3.1.2</version>
       </plugin>
 
-      <!-- ✅ JaCoCo (FIX for your error) -->
+      <!-- JaCoCo -->
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
