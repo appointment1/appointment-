@@ -15,6 +15,9 @@
   </properties>
 
   <dependencies>
+           <properties>
+  <sonar.organization>appointment1</sonar.organization>
+</properties>
 
     <!-- JUnit 5 -->
     <dependency>
