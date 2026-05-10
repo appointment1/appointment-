@@ -1,28 +1,41 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>appointment_scheduling3</groupId>
   <artifactId>appointment_scheduling3</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-
-         
-         
   <properties>
+
+    <!-- Java 17 -->
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-    <junit.version>5.9.2</junit.version>
 
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- JUnit -->
+    <junit.version>5.10.2</junit.version>
+
+    <!-- SonarCloud -->
     <sonar.organization>appointment1</sonar.organization>
     <sonar.projectKey>appointment1_appointment-</sonar.projectKey>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
-    <!-- ✅ هذا السطر الجديد (المهم) -->
+    <!-- Coverage report path (مهم جدًا للسونار) -->
     <sonar.coverage.jacoco.xmlReportPaths>
       target/site/jacoco/jacoco.xml
     </sonar.coverage.jacoco.xmlReportPaths>
+
+    <!-- Exclusions -->
+    <sonar.coverage.exclusions>
+      **/test/**,
+      **/Domain_Layer/**,
+      **/Persistence_Layer/**,
+      **/presentation_Layer/**
+    </sonar.coverage.exclusions>
 
   </properties>
 
@@ -31,23 +44,8 @@
     <!-- JUnit 5 -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
+      <artifactId>junit-jupiter</artifactId>
       <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- System Stubs -->
-    <dependency>
-      <groupId>uk.org.webcompere</groupId>
-      <artifactId>system-stubs-jupiter</artifactId>
-      <version>2.1.7</version>
       <scope>test</scope>
     </dependency>
 
@@ -55,22 +53,28 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.10.0</version>
+      <version>5.11.0</version>
       <scope>test</scope>
     </dependency>
 
-    <!-- Jakarta Mail -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>5.11.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Mail -->
     <dependency>
       <groupId>com.sun.mail</groupId>
       <artifactId>jakarta.mail</artifactId>
       <version>2.0.1</version>
     </dependency>
 
-    <!-- Dotenv -->
     <dependency>
-      <groupId>io.github.cdimascio</groupId>
-      <artifactId>java-dotenv</artifactId>
-      <version>5.2.2</version>
+      <groupId>com.sun.activation</groupId>
+      <artifactId>jakarta.activation</artifactId>
+      <version>2.0.1</version>
     </dependency>
 
   </dependencies>
@@ -93,7 +97,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.1.2</version>
+        <version>3.2.5</version>
+        <configuration>
+          <useModulePath>false</useModulePath>
+        </configuration>
       </plugin>
 
       <!-- JaCoCo -->
@@ -103,21 +110,41 @@
         <version>0.8.12</version>
 
         <executions>
+
+          <!-- تشغيل التتبع قبل الاختبارات -->
           <execution>
             <goals>
               <goal>prepare-agent</goal>
             </goals>
           </execution>
 
+          <!-- إنشاء التقرير -->
           <execution>
             <id>report</id>
-            <phase>test</phase>
+            <phase>verify</phase>
             <goals>
               <goal>report</goal>
             </goals>
           </execution>
+
         </executions>
 
+        <!-- نفس الاستثناءات اللي عندك -->
+        <configuration>
+          <excludes>
+            <exclude>**/Domain_Layer/**</exclude>
+            <exclude>**/Persistence_Layer/**</exclude>
+            <exclude>**/presentation_Layer/**</exclude>
+          </excludes>
+        </configuration>
+
+      </plugin>
+
+      <!-- SonarCloud plugin -->
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.11.0.3922</version>
       </plugin>
 
     </plugins>
