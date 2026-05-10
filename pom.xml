@@ -31,7 +31,7 @@
 
     <!-- Exclusions -->
     <sonar.coverage.exclusions>
-      **/test/**,
+      
       **/Domain_Layer/**,
       **/Persistence_Layer/**,
       **/presentation_Layer/**
